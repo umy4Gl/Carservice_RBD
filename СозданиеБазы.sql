@@ -1,0 +1,65 @@
+DROP DATABASE CarService;
+CREATE DATABASE CarService;
+
+USE CarService;
+
+CREATE TABLE Client
+(
+ Passport_series_and_number INTEGER PRIMARY KEY,
+ Full_name VARCHAR(255) NOT NULL,
+ Phone_number  VARCHAR(12) NOT NULL
+);
+
+CREATE TABLE Car
+(id INTEGER AUTO_INCREMENT PRIMARY KEY,
+Car_number VARCHAR(12) NOT NULL,
+Brand VARCHAR(100) NOT NULL,
+PTC_number VARCHAR(10) NOT NULL,
+Color VARCHAR(50)
+);
+
+CREATE TABLE Position
+( id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  Title VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Employee
+(id INTEGER AUTO_INCREMENT PRIMARY KEY,
+Full_name VARCHAR(255) NOT NULL,
+Phone_number  VARCHAR(12),
+id_position INTEGER NOT NULL,
+FOREIGN KEY(id_position) REFERENCES Position(id)
+);
+
+CREATE TABLE Contract
+(id INTEGER AUTO_INCREMENT PRIMARY KEY,
+Conclusion_date DATE NOT NULL,
+id_car INTEGER NOT NULL,
+id_employee INTEGER NOT NULL,
+id_client INTEGER NOT NULL,
+FOREIGN KEY(id_car) REFERENCES Car(id),
+FOREIGN KEY(id_employee) REFERENCES Employee(id),
+FOREIGN KEY(id_client) REFERENCES Client(Passport_series_and_number)
+);
+
+CREATE TABLE Service
+(id INTEGER AUTO_INCREMENT PRIMARY KEY,
+Title VARCHAR(100) NOT NULL,
+Price_in_rubles INTEGER NOT NULL,
+Availability BOOLEAN NOT NULL
+);
+
+CREATE TABLE Request
+(id INTEGER AUTO_INCREMENT PRIMARY KEY,
+Status ENUM('In work', 'Completed', 'Under consideration') NOT NULL,
+id_employee INTEGER NOT NULL,
+FOREIGN KEY(id_employee) REFERENCES Employee(id)
+);
+
+CREATE TABLE List_of_services
+(Paragraph_number INTEGER NOT NULL PRIMARY KEY,
+id_contract INTEGER NOT NULL PRIMARY KEY,
+id_request INTEGER NOT NULL,
+FOREIGN KEY(id_contract) REFERENCES Contract(id),
+FOREIGN KEY(id_request) REFERENCES Request(id)
+);
